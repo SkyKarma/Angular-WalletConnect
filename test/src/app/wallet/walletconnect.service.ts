@@ -3,6 +3,7 @@ import {WcSdk} from "@cityofzion/wallet-connect-sdk-core/lib";
 import { SessionTypes } from '@walletconnect/types'
 import Client from '@walletconnect/client'
 import QRCodeModal from '@walletconnect/qrcode-modal'
+import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +14,14 @@ export class WalletconnectService {
 
   constructor() 
   { 
-    this.setupClient();
-  }
-
-  private async setupClient()
-  {
-    this.wcClient = await WcSdk.initClient(
+    WcSdk.initClient(
       "debug", // logger: use debug to show all log information on browser console
       "wss://relay.walletconnect.org" // we are using walletconnect's official relay server
-    );
+    ).then(result => 
+      {
+        console.log("client initiated");
+        this.wcClient = result;
+    });
   }
 
   connectWallet()
@@ -43,6 +43,4 @@ export class WalletconnectService {
       }
     })
   }
-
-  
 }
